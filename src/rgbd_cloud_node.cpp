@@ -1,4 +1,8 @@
-#include <cv_bridge/cv_bridge.h>
+#ifdef ROS_HUMBLE
+	#include <cv_bridge/cv_bridge.h>
+#else
+	#include <cv_bridge/cv_bridge.hpp>
+#endif
 #include <image_transport/camera_common.hpp>
 #include <image_transport/subscriber_filter.hpp>
 #include <message_filters/subscriber.h>

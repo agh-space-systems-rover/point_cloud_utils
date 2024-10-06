@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.8)
 project(point_cloud_utils)
 
+# Silence FLANN_ROOT warning on Jazzy.
+set(CMAKE_POLICY_DEFAULT_CMP0144 OLD)
+
+# Read ROS_DISTRO and if it is "humble", define ROS_HUMBLE.
+if($ENV{ROS_DISTRO} STREQUAL "humble")
+  add_definitions(-DROS_HUMBLE)
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
