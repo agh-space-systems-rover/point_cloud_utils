@@ -11,6 +11,7 @@ utilities for working with point clouds; Includes ROS wrappers around PCL filter
 ### RGBD Cloud Configuration
 
 Topics:
+
 - `color/image_raw` - color image
 - `depth/image_raw` - depth image
 - `cloud` - point cloud
@@ -18,6 +19,7 @@ Topics:
 Both images must arrive with the same timestamp for a cloud to be generated.
 
 Parameters:
+
 ```yaml
 /**:
   ros__parameters:
@@ -36,10 +38,12 @@ Parameters:
 ### Cloud Sync Configuration
 
 Topics:
+
 - `inputN` - input point clouds (N = 0, 1, 2, ...)
 - `output` - merged point cloud
 
 Parameters:
+
 ```yaml
 /**:
   ros__parameters:
@@ -56,15 +60,17 @@ Parameters:
 ### Obstacle Detection Configuration
 
 Topics:
+
 - `input` - input point cloud
 - `output` - obstacle cloud
 
 Parameters:
+
 ```yaml
 /**:
   ros__parameters:
-    # The frame to which transform the point cloud before processing. (default: "odom")
-    world_frame: "odom"
+    # The frame to which transform the point cloud before processing. It must have a world-aligned pitch and roll, so that slope can be calculated. (default: "map")
+    world_frame: "map"
     # The radius for normal estimation. (default: 0.2)
     normal_estimation_radius: 0.2
     # The maximum angle between the ground and the normal for a point to be considered ground. (radians, default: 30 degrees)
@@ -90,6 +96,7 @@ Parameters:
 - [`voxel_grid`](src/voxel_grid_node.cpp)
 
 Those can be chained in a launch file to create a pipeline:
+
 ```py
 def generate_launch_description():
     return LaunchDescription([

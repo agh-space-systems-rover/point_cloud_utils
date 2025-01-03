@@ -13,7 +13,7 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 constexpr int         default_queue_size                    = 10;
-constexpr const char *default_world_frame                   = "odom";
+constexpr const char *default_world_frame                   = "map";
 constexpr float       default_normal_estimation_radius      = 0.2;
 constexpr float       default_max_ground_angle              = 25 * M_PI / 180;
 constexpr float       default_outlier_removal_radius        = 0.2;
