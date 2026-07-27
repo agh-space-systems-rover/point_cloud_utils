@@ -50,6 +50,14 @@ rclcpp_components_register_node(
   EXECUTABLE radius_outlier_removal
 )
 
+add_library(depth_image_filter_node SHARED src/depth_image_filter_node.cpp)
+ament_target_dependencies(depth_image_filter_node rclcpp rclcpp_components sensor_msgs image_transport)
+rclcpp_components_register_node(
+  depth_image_filter_node
+  PLUGIN "point_cloud_utils::DepthImageFilter"
+  EXECUTABLE depth_image_filter
+)
+
 add_library(rgbd_cloud_node SHARED src/rgbd_cloud_node.cpp)
 ament_target_dependencies(rgbd_cloud_node rclcpp rclcpp_components sensor_msgs message_filters image_transport cv_bridge)
 rclcpp_components_register_node(
@@ -75,7 +83,7 @@ rclcpp_components_register_node(
 )
 
 ament_export_targets(point_cloud_utils-targets)
-install(TARGETS cloud_sync_node obstacle_detection_node radius_outlier_removal_node rgbd_cloud_node statistical_outlier_removal_node voxel_grid_node
+install(TARGETS cloud_sync_node depth_image_filter_node obstacle_detection_node radius_outlier_removal_node rgbd_cloud_node statistical_outlier_removal_node voxel_grid_node
   EXPORT point_cloud_utils-targets
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
