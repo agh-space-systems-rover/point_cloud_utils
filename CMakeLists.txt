@@ -51,7 +51,7 @@ rclcpp_components_register_node(
 )
 
 add_library(depth_image_filter_node SHARED src/depth_image_filter_node.cpp)
-ament_target_dependencies(depth_image_filter_node rclcpp rclcpp_components sensor_msgs)
+ament_target_dependencies(depth_image_filter_node rclcpp rclcpp_components sensor_msgs image_transport)
 rclcpp_components_register_node(
   depth_image_filter_node
   PLUGIN "point_cloud_utils::DepthImageFilter"

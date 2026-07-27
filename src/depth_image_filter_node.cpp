@@ -1,3 +1,4 @@
+#include <image_transport/image_transport.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
 #include <sensor_msgs/image_encodings.hpp>
@@ -12,8 +13,8 @@ namespace point_cloud_utils {
 
 class DepthImageFilter : public rclcpp::Node {
   public:
-	rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub;
-	rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr    pub;
+	image_transport::Subscriber sub;
+	rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub;
 
 	DepthImageFilter(const rclcpp::NodeOptions &options)
 	    : Node("depth_image_filter", options) {
@@ -21,12 +22,23 @@ class DepthImageFilter : public rclcpp::Node {
 		img_qos.durability(RMW_QOS_POLICY_DURABILITY_VOLATILE);
 		img_qos.reliability(RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT);
 
-		sub = create_subscription<sensor_msgs::msg::Image>(
-		    "image_raw",
-		    img_qos,
-		    std::bind(&DepthImageFilter::callback, this, std::placeholders::_1)
+		declare_parameter("depth_transport", "raw");
+
+		const std::string input_topic =
+		    get_node_topics_interface()->resolve_topic_name("image_raw");
+		const std::string output_topic =
+		    get_node_topics_interface()->resolve_topic_name("image_filtered");
+		image_transport::TransportHints hints(this, "raw", "depth_transport");
+		sub = image_transport::create_subscription(
+		    this,
+		    input_topic,
+		    std::bind(&DepthImageFilter::callback, this, std::placeholders::_1),
+		    hints.getTransport(),
+		    img_qos.get_rmw_qos_profile()
 		);
-		pub = create_publisher<sensor_msgs::msg::Image>("image_filtered", img_qos);
+		pub = create_publisher<sensor_msgs::msg::Image>(
+		    output_topic, img_qos
+		);
 	}
 
 	void callback(const sensor_msgs::msg::Image::ConstSharedPtr &input) {
